@@ -125,10 +125,12 @@ function AdminProducts() {
       field: "is_offer" | "is_bestseller" | "is_active";
       value: boolean;
     }) => {
+      const patch: Record<string, boolean> = { [field]: value };
       const { error } = await supabase
         .from("products")
-        .update({ [field]: value })
+        .update(patch as { is_offer?: boolean; is_bestseller?: boolean; is_active?: boolean })
         .eq("id", id);
+
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
